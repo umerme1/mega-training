@@ -21,7 +21,7 @@ signature: umerme1
 
 [#4471](/kb/incidents/4471) says **one issue, one fix queued**. Its own table says two causes, and
 its footnote names a third. This page reads the same export the desk's page reads and counts
-every report once, under the problem it belongs to. Each problem has a ticket of its own in
+as the desk counts: every report under its cause, and the one-day moves named on top. Each problem has a ticket of its own in
 [umerme1/mega-training](https://github.com/umerme1/mega-training/issues).
 
 <Callout kind="warn">
@@ -45,8 +45,8 @@ that came in through the form from a booking-v3 tenant are this problem.
 
 **one-day-move.** Five reports are not a month flip at all: the date moved by one day, an invite
 came in before its booking, or two time zones got two different days. The desk read them as a
-one-day move and wrote it in its notes, then counted them under `parser` anyway. They need a
-look of their own.
+one-day move and wrote it in its notes; they stay counted under `parser`, where the desk filed
+them, and get a ticket of their own on top.
 
 ## Why the merge hid this
 

@@ -9,7 +9,7 @@
   let { ticket, issues = {} }: { ticket: number; issues?: Partial<Record<Problem, string>> } = $props();
 
   const rows = $derived(splitTicket(reports as Report[], ticket, notes.oneDayMove, tenantOf));
-  const total = $derived(rows.reduce((n, r) => n + r.reports.length, 0));
+  const total = $derived(rows.filter((r) => r.problem !== 'one-day-move').reduce((n, r) => n + r.reports.length, 0));
   const wrongTags = $derived(mistagged(rows));
   const list = (m: Record<string, number>) =>
     Object.entries(m)
@@ -37,7 +37,7 @@
     {#each rows as r (r.problem)}
       <tr>
         <td><code>{r.problem}</code></td>
-        <td><strong>{r.reports.length}</strong></td>
+        <td><strong>{r.reports.length}</strong>{#if r.within.length} <span class="tags">of {r.within.join(', ')}</span>{/if}</td>
         <td>{WHAT[r.problem]}</td>
         <td class="tags">{list(r.channels)}</td>
         <td>{r.tenants}</td>
@@ -50,7 +50,7 @@
 
 {#each rows as r (r.problem)}
   {#if r.problem === 'one-day-move'}
-    <p class="note">one-day-move: {r.reports.map((x) => x.id).join(', ')} — the desk's own notes name them.</p>
+    <p class="note">one-day-move: {r.reports.map((x) => x.id).join(', ')} — the desk's own notes name them; they stay counted under {r.within.join(', ')}, as the desk counts.</p>
   {/if}
 {/each}
 
