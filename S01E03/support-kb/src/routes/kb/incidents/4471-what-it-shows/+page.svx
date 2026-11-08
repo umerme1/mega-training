@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 · what it shows: three problems, not one'
 owner: umerme1
-status: proposed
+status: closed
 reviewed: 2026-11-08
 signature: umerme1
 ---
@@ -65,5 +65,15 @@ them, and get a ticket of their own on top.
 2. Open the `hint` and `one-day-move` tickets as their own work; they are filed and linked above.
 3. Stop merging on subject alone during this incident: run `causeOf` on tenant and channel first,
    as the [dedupe explorer](/kb/triage/dedupe) already does.
+
+## Outcome
+
+Engineering closed #4471 on 5 October:
+
+| problem | outcome | ticket |
+|---|---|---|
+| `parser` | **fixed** · `fix(dates): parse dd/mm for eu locales` | [#1](https://github.com/umerme1/mega-training/issues/1) closed |
+| `hint` | **won't fix** · booking-v3 form retired | [#2](https://github.com/umerme1/mega-training/issues/2) closed |
+| `one-day-move` | not addressed in #4471; closed with it, reopen if it comes back | [#3](https://github.com/umerme1/mega-training/issues/3) closed |
 
 <RenderStamp {signature} />
