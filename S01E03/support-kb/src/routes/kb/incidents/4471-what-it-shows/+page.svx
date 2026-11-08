@@ -1,0 +1,69 @@
+---
+layout: runbook
+title: '#4471 · what it shows: three problems, not one'
+owner: umerme1
+status: proposed
+reviewed: 2026-11-08
+signature: umerme1
+---
+
+<script>
+  import TicketTable from '#lib/kb/TicketTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+
+  const issues = {
+    parser: 'https://github.com/umerme1/mega-training/issues/1',
+    hint: 'https://github.com/umerme1/mega-training/issues/2',
+    'one-day-move': 'https://github.com/umerme1/mega-training/issues/3',
+  };
+</script>
+
+[#4471](/kb/incidents/4471) says **one issue, one fix queued**. Its own table says two causes, and
+its footnote names a third. This page reads the same export the desk's page reads and counts
+every report once, under the problem it belongs to. Each problem has a ticket of its own in
+[umerme1/mega-training](https://github.com/umerme1/mega-training/issues).
+
+<Callout kind="warn">
+The queued fix is for the parser. It does nothing for the booking-v3 form hint, and nothing for
+the one-day moves. Two of the three problems stay open after it ships.
+</Callout>
+
+## The three problems
+
+<TicketTable ticket={4471} {issues} />
+
+**parser.** The shared parser reads every date month first. Every tenant on file writes the day
+first (`dayFirst` in `causes.ts` asks the platform, locale by locale), so `07/04` typed in the app
+or sent by email means 7 April to them and 4 July to the parser. Reaches every tenant, through the
+app, email and the booking-v2 form.
+
+**hint.** Three tenants run booking-v3. Its form prints `MM/DD/YYYY` under the date field, so
+their people type the month first as told, and the form then reads it the tenant's way, day
+first. Same symptom, a flipped month, but a different bug in a different place. Only reports
+that came in through the form from a booking-v3 tenant are this problem.
+
+**one-day-move.** Five reports are not a month flip at all: the date moved by one day, an invite
+came in before its booking, or two time zones got two different days. The desk read them as a
+one-day move and wrote it in its notes, then counted them under `parser` anyway. They need a
+look of their own.
+
+## Why the merge hid this
+
+- Reports were merged by subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)),
+  and all twelve subjects describe the symptom, not the cause. The same subject covers all three
+  problems.
+- Intake tagged each report from the reporter's browser locale, not from the tenant. The table
+  above counts how many tags point at the wrong cause. The tag is a guess; tenant and channel
+  are the fact.
+- The export overlaps between pages, so 15 reports appear twice. `uniqueById` already handles
+  it; the numbers here are deduplicated the same way.
+
+## What to do with #4471
+
+1. Keep #4471 for `parser` and link the parser ticket from it.
+2. Open the `hint` and `one-day-move` tickets as their own work; they are filed and linked above.
+3. Stop merging on subject alone during this incident: run `causeOf` on tenant and channel first,
+   as the [dedupe explorer](/kb/triage/dedupe) already does.
+
+<RenderStamp {signature} />
