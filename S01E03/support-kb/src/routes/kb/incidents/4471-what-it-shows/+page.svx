@@ -4,7 +4,7 @@ title: '#4471 · what it shows: three problems, not one'
 owner: umerme1
 status: closed
 reviewed: 2026-11-08
-signature: umerme1
+signature: 'v1.eyJzdWIiOiIyMzYwIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTQxMTM0NTksImV4cCI6MTc5NDE5OTg1OX0.GV8yQ_fR1z0-3Na2E1aFKo1c9UDE2l9idKYGrTx4KMA'
 ---
 
 <script>
