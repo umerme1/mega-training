@@ -9,7 +9,10 @@ const SKILL_VERSION = "1";
 const FIELDS = ["date", "time", "clock", "line", "cause"]; // never "crew"
 let rpcId = 0;
 
-const mask = (s) => s.replace(/"(step|receipt|stepToken|token)":\s*"[^"]*"/g, '"$1":"<masked>"');
+// Mask by value: every step token / receipt seen so far is replaced wherever it appears, escaped or not.
+const secrets = new Set();
+const mask = (s) => { let out = String(s); for (const v of secrets) out = out.split(v).join("<masked>"); return out.replace(/\\?"(step|receipt|stepToken|token)\\?":\s*\\?"[^"\\]*\\?"/g, '"$1":"<masked>"'); };
+const harvest = (o) => { if (!o || typeof o !== "object") return; for (const [k, v] of Object.entries(o)) { if (typeof v === "string" && /^(step|receipt|stepToken|token)$/.test(k)) secrets.add(v); else if (typeof v === "string" && v.trim().startsWith("{")) { try { harvest(JSON.parse(v)); } catch {} } else harvest(v); } };
 const log = (label, obj) => console.log(`## ${label}\n${mask(JSON.stringify(obj, null, 1))}`);
 
 async function rpc(method, params) {
@@ -32,6 +35,8 @@ async function rpc(method, params) {
 
 async function call(name, args) {
   const r = await rpc("tools/call", { name, arguments: args });
+  harvest(r);
+  for (const v of secrets) console.log(`::add-mask::${v}`);
   log(`${name} <- ${mask(JSON.stringify(args))}`, r);
   if (r.isError) throw new Error(`${name} returned isError: ${JSON.stringify(r.content)}`);
   return r;
