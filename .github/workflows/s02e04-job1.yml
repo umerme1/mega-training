@@ -1,0 +1,24 @@
+name: S02E04 job 1 (incident-lookup)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  incident-lookup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run the job 1 worker on its MCP link
+        env:
+          JOB1_URL: ${{ secrets.S02E04_JOB1_URL }}
+        run: node S02E04/worker/job1-worker.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: job1-result
+          path: out/job1.json
+          if-no-files-found: ignore
+          retention-days: 1
