@@ -14,11 +14,12 @@ what just broke and takes it.
 ## Requirements
 
 - **R1** New incidents appear live at the top of the list, newest first.
-- **R2** Each incident row has an **Ack** button. Ack sends the ack (`api.ack(id)`) and marks the row acked.
+- **R2** A row opens its incident panel, which names the incident. **Ack** lives in the panel (`panel-ack`): it sends the ack (`api.ack(id)`) for the panel's incident and marks that row acked. (Changed by product on 2026-11-21 after the step-1 report: the Ack button left the row because a new incident landing at the top could move rows under the pointer.)
 - **R3** Show a loader until incidents load.
 - **R4** The board refreshes itself every 2 seconds while open.
 - **R5** Times show in the viewer's local time; day before month for EU locales (dd/mm).
 - **R6** The page names its build: `<meta name="build" content="<git sha>">` in the head and the same sha in the footer.
+- **R7** Rows update in place: new incidents are inserted, existing rows keep their nodes and never leave the board while it is open.
 
 ## Hooks (pinned — tests and the replay rely on them)
 
@@ -29,7 +30,10 @@ what just broke and takes it.
 | `empty` | what shows when there are no incidents |
 | `incident-list` | the list |
 | `incident-row` | one incident row, with `data-id="<incident id>"` |
-| `ack` | the Ack button in a row |
+| `ack` | (retired on 2026-11-21: Ack left the row) |
+| `incident-panel` | the incident panel, naming the incident id (`data-id`) |
+| `panel-ack` | the Ack button in the panel |
+| `panel-close` | closes the panel |
 | `acked` | the acked mark in a row |
 | `build-sha` | the sha in the footer |
 
